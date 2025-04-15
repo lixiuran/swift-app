@@ -16,20 +16,34 @@ struct DataCard: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text(title)
-                .foregroundColor(.white)
-                .font(.system(size: 14))
-            HStack(alignment: .bottom) {
+            // 第一行
+            HStack {
+                // 左侧标题
+                Text(title)
+                    .foregroundColor(.white)
+                    .font(.system(size: 14))
+                
+                Spacer()
+                
+                // 右侧百分比
+                Text(percentage)
+                    .foregroundColor(.white)
+                    .font(.system(size: 14))
+            }
+            
+            // 第二行
+            HStack {
+                // 左侧金额
                 Text(amount)
                     .foregroundColor(.white)
                     .font(.system(size: 18, weight: .bold))
+                
                 Spacer()
-                VStack(alignment: .trailing) {
-                    Text(percentage)
-                        .foregroundColor(.white)
-                    Text(change)
-                        .foregroundColor(.white)
-                }
+                
+                // 右侧变化值
+                Text(change)
+                    .foregroundColor(.white)
+                    .font(.system(size: 14))
             }
         }
         .padding()
@@ -165,13 +179,14 @@ struct HomeView: View {
         NavigationView {
             ZStack {
                 Color(hex: "F5F5F5").edgesIgnoringSafeArea(.all)
-                
+                Spacer()
                 ScrollView {
-                    VStack(spacing: 20) {
+                    VStack(spacing: 10) {
                         // 核心数据部分
-                        VStack(alignment: .leading, spacing: 10) {
+                        VStack(alignment: .leading, spacing:10) {
                             Text("核心数据")
                                 .font(.system(size: 18, weight: .medium))
+                                .padding(.top, 20)
                             
                             LazyVGrid(columns: [
                                 GridItem(.flexible()),
@@ -179,8 +194,8 @@ struct HomeView: View {
                             ], spacing: 10) {
                                 DataCard(title: "今日收益", amount: "8911.07", percentage: "-12.52%", change: "-1274.86", isNegative: true)
                                 DataCard(title: "昨日收益", amount: "10185.93", percentage: "-2.05%", change: "-212.73", isNegative: true)
-                                DataCard(title: "昨日收益(国内)", amount: "995.35", percentage: "-0.64%", change: "-6.37", isNegative: true)
-                                DataCard(title: "昨日收益(海外)", amount: "9190.58", percentage: "-2.2%", change: "-206.36", isNegative: true)
+                                DataCard(title: "昨日国内", amount: "995.35", percentage: "-0.64%", change: "-6.37", isNegative: true)
+                                DataCard(title: "昨日海外", amount: "9190.58", percentage: "-2.2%", change: "-206.36", isNegative: true)
                                 DataCard(title: "本月收益", amount: "16.23万", percentage: "-50.87%", change: "-16.80万", isNegative: true)
                                 DataCard(title: "上月累计收益", amount: "33.03万", percentage: "+6.72%", change: "+2.08万", isNegative: false)
                             }
@@ -191,7 +206,7 @@ struct HomeView: View {
                         VStack(alignment: .leading, spacing: 10) {
                             Text("详细数据")
                                 .font(.system(size: 18, weight: .medium))
-                                .padding(.horizontal)
+                                .padding(.top, 10)
                             
                             VStack(spacing: 1) {
                                 DetailItem(icon: "building.columns", title: "账户", subtitle: "快速查看账户总收益")
