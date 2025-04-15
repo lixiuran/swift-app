@@ -18,11 +18,11 @@ struct DataCard: View {
         VStack(alignment: .leading, spacing: 8) {
             Text(title)
                 .foregroundColor(.white)
-                .font(.system(size: 16))
+                .font(.system(size: 14))
             HStack(alignment: .bottom) {
                 Text(amount)
                     .foregroundColor(.white)
-                    .font(.system(size: 24, weight: .bold))
+                    .font(.system(size: 18, weight: .bold))
                 Spacer()
                 VStack(alignment: .trailing) {
                     Text(percentage)
@@ -73,7 +73,94 @@ struct DetailItem: View {
     }
 }
 
-struct ContentView: View {
+struct DrawerView: View {
+    @Binding var isPresented: Bool
+    @State private var isDarkMode = false
+    let version = "V1.0.0"
+    let phoneNumber = "13521032797"
+    
+    var body: some View {
+        GeometryReader { geometry in
+            HStack(spacing: 0) {
+                VStack(spacing: 0) {
+                    // 头部信息
+                    VStack(alignment: .leading, spacing: 12) {
+                        Image(systemName: "person.circle.fill")
+                            .resizable()
+                            .frame(width: 60, height: 60)
+                            .foregroundColor(.white)
+                        
+                        Text("管理员")
+                            .font(.system(size: 18, weight: .medium))
+                            .foregroundColor(.white)
+                        
+                        Text(phoneNumber)
+                            .font(.system(size: 16))
+                            .foregroundColor(.white)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 30)
+                    .background(Color(hex: "4169E1"))
+                    
+                    // 菜单列表
+                    VStack(spacing: 0) {
+                        HStack {
+                            Image(systemName: "info.circle")
+                            Text("版本号：\(version)")
+                            Spacer()
+                        }
+                        .padding()
+                        
+                        Divider()
+                        
+                        HStack {
+                            Image(systemName: isDarkMode ? "moon.fill" : "moon")
+                            Text("切换到深色主题")
+                            Spacer()
+                            Toggle("", isOn: $isDarkMode)
+                        }
+                        .padding()
+                        
+                        Divider()
+                        
+                        Button(action: {
+                            // 退出登录操作
+                        }) {
+                            HStack {
+                                Image(systemName: "arrow.right.square")
+                                Text("退出登录")
+                                    .foregroundColor(.red)
+                                Spacer()
+                            }
+                            .padding()
+                        }
+                    }
+                    .background(Color.white)
+                    
+                    Spacer()
+                }
+                .frame(width: geometry.size.width * 0.75)
+                .background(Color.white)
+                
+                Spacer()
+            }
+            .background(
+                Color.black.opacity(0.3)
+                    .onTapGesture {
+                        withAnimation {
+                            isPresented = false
+                        }
+                    }
+            )
+        }
+        .edgesIgnoringSafeArea(.all)
+    }
+}
+
+struct HomeView: View {
+    @State private var isDrawerPresented = false
+    
     var body: some View {
         NavigationView {
             ZStack {
@@ -117,6 +204,12 @@ struct ContentView: View {
                         .padding(.horizontal)
                     }
                 }
+                
+                // 添加抽屉视图
+                if isDrawerPresented {
+                    DrawerView(isPresented: $isDrawerPresented)
+                        .transition(.move(edge: .leading))
+                }
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -126,7 +219,11 @@ struct ContentView: View {
                         .foregroundColor(.white)
                 }
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: {}) {
+                    Button(action: {
+                        withAnimation {
+                            isDrawerPresented.toggle()
+                        }
+                    }) {
                         Image(systemName: "line.horizontal.3")
                             .foregroundColor(.white)
                     }
@@ -135,6 +232,54 @@ struct ContentView: View {
             .toolbarBackground(Color(hex: "4169E1"), for: .navigationBar)
             .toolbarBackground(.visible, for: .navigationBar)
         }
+    }
+}
+
+struct DataView: View {
+    var body: some View {
+        NavigationView {
+            Text("数据页面")
+                .navigationTitle("数据")
+        }
+    }
+}
+
+struct StatisticsView: View {
+    var body: some View {
+        NavigationView {
+            Text("统计页面")
+                .navigationTitle("统计")
+        }
+    }
+}
+
+struct ContentView: View {
+    @State private var selectedTab = 0
+    
+    var body: some View {
+        TabView(selection: $selectedTab) {
+            HomeView()
+                .tabItem {
+                    Image(systemName: "house.fill")
+                    Text("首页")
+                }
+                .tag(0)
+            
+            DataView()
+                .tabItem {
+                    Image(systemName: "chart.bar.fill")
+                    Text("数据")
+                }
+                .tag(1)
+            
+            StatisticsView()
+                .tabItem {
+                    Image(systemName: "chart.pie.fill")
+                    Text("统计")
+                }
+                .tag(2)
+        }
+        .accentColor(Color(hex: "4169E1"))
     }
 }
 
