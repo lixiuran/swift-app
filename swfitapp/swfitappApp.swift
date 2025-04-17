@@ -8,10 +8,10 @@
 import SwiftUI
 
 @main
-struct swfitappApp: App {
+struct SwiftAppApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            LoginView()
         }
     }
 }
