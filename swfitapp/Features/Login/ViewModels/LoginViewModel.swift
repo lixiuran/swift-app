@@ -56,7 +56,7 @@ class LoginViewModel: ObservableObject {
                 if self.countdown > 0 {
                     self.countdown -= 1
                 } else {
-                    await self.stopCountdown()
+                    self.stopCountdown()
                 }
             }
         }
